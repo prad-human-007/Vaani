@@ -44,7 +44,7 @@ export const signInwithOAuthAction = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     'provider': 'google',
     options: { 
-      redirectTo: `https://www.visaprepai.com/auth/callback`
+      redirectTo: process.env.OAUTH_REDIRECT_URL
   }
   })
 

@@ -8,17 +8,17 @@ import { BasicPlan } from "@/components/payment/Plans";
 
 export default async function Profile() {
 
-    const supabase = await createClient();
-    const { data: {user} } = await supabase.auth.getUser();
-    if(!user) {
-        redirect("/sign-in");
-    }
-    const title = user.email!
-    const description = user.email!
-    const {name, avatar_url} = user.user_metadata
+    // const supabase = await createClient();
+    // const { data: {user} } = await supabase.auth.getUser();
+    // if(!user) {
+    //     redirect("/sign-in");
+    // }
+    // const title = user.email!
+    // const description = user.email!
+    // const {name, avatar_url} = user.user_metadata
 
 
-    const {data} = await supabase.from("roles").select('chats_left').eq('user_id', user.id)
+    // const {data} = await supabase.from("roles").select('chats_left').eq('user_id', user.id)
     return (
         <div className="flex flex-col w-full h-screen items-center gap-4">
             <div className="flex flex-col gap-3 max-w-4xl w-full">
@@ -27,18 +27,18 @@ export default async function Profile() {
                     <CardHeader>
                         <div className="flex items-center gap-4">
                             <Avatar >
-                                <AvatarImage src={avatar_url} alt="User profile picture" />
-                                <AvatarFallback>{title.split(' ').map(word => word.charAt(0)).join('')}</AvatarFallback>
+                                {/* <AvatarImage src={avatar_url} alt="User profile picture" /> */}
+                                {/* <AvatarFallback>{title.split(' ').map(word => word.charAt(0)).join('')}</AvatarFallback> */}
                             </Avatar>
                         <div>
-                            <CardTitle>{name? name : title}</CardTitle>
-                            <CardDescription>{description}</CardDescription>
+                            {/* <CardTitle>{name? name : title}</CardTitle> */}
+                            {/* <CardDescription>{description}</CardDescription> */}
                         </div>
                         </div>
                     </CardHeader>
                     <CardContent>
                         <div className="italic text-ms">
-                            Number of credits left: {data![0].chats_left}
+                            Number of credits left: {'sdfa'}
                         </div>
                     </CardContent>
                     

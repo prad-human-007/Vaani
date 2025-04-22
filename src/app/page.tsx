@@ -3,6 +3,7 @@ import { SignInButton, SignUpButton} from "@/components/auth-buttons";
 import { UserDropdown } from "@/components/home/user-dropdown";
 import { Hero } from "@/components/home/hero";
 import Image from "next/image";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default async function Home() {
 
@@ -10,7 +11,7 @@ export default async function Home() {
   const { data: {user} } = await supabase.auth.getUser();
 
   return (
-    <div className="landing-page flex flex-col items-center justify-between w-full ">
+    <div className="flex flex-col items-center justify-between w-full ">
 
       <div className="w-full">
         <div className="flex justify-center w-full px-2">
@@ -28,6 +29,7 @@ export default async function Home() {
             </a>
             
             <div className="flex gap-2 items-center">
+              <ModeToggle />
               <a href="/blogs" className="h-10 rounded-xl border p-2 bg-orange-200 shadow-xl ">FAQ</a>
               {!user && <SignInButton/> }
               {!user && <SignUpButton/> }
