@@ -9,6 +9,16 @@ const config: Config = {
   ],
   theme: {
     extend: {
+		animation: {
+			'border-spin': 'rotateBorder 5s linear infinite',
+		  },
+
+		  keyframes: {
+			rotateBorder: {
+			  '0%': { '--angle': '0deg' },
+			  '100%': { '--angle': '360deg' },
+			}
+		  },
       fontFamily: {
         gilroy: ["Gilroy", "sans-serif"],
       },

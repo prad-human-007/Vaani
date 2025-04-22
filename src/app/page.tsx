@@ -1,19 +1,24 @@
 import { createClient } from "@/utils/supabase/server";
-import { SignInButton, SignUpButton} from "@/components/auth-buttons";
+import { SignInButton, SignUpButton } from "@/components/auth-buttons";
 import { UserDropdown } from "@/components/home/user-dropdown";
 import { Hero } from "@/components/home/hero";
 import Image from "next/image";
 import { ModeToggle } from "@/components/mode-toggle";
+import AutonomousTestingComponent from "@/components/autonomous/autonomous";
+import HowItWorks from "@/components/how/howitworks";
+import ObservabilityFeatures from "@/components/observatibility/features";
+import WhyUsSection from "@/components/whyus/whyus";
+import TestimonialSection from "@/components/testimonial/testimonial";
 // import VisaPrepAIRedesign from "@/components/home/hero";
 
 export default async function Home() {
-
   const supabase = await createClient();
-  const { data: {user} } = await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
 
   return (
     <div className="flex flex-col items-center justify-between w-full ">
-
       <div className="w-full">
         {/* <div className="flex justify-center w-full px-2">
           <div className="flex flex-row shadow-xl rounded-2xl mt-3 w-full max-w-7xl justify-between items-center gap-3 p-3 bg-white bg-opacity-50"> 
@@ -40,15 +45,12 @@ export default async function Home() {
         </div> */}
       </div>
 
-      <Hero user={user}/>
-      {/* <VisaPrepAIRedesign /> */}
-      {/* FOOTER */}
-      <div className="mt-5 flex flex-row gap-2 text-gray-700 mb-1">
-        <a href="/terms" className="font-thin ">Terms & Conditions</a>
-        <span className="font-thin ">|</span>
-        <a href="/privacy" className="font-thin ">Privacy</a>
-      </div>
-
+      <Hero user={user} />
+      <AutonomousTestingComponent />
+      <HowItWorks />
+      <ObservabilityFeatures />
+      <WhyUsSection />
+      <TestimonialSection />
     </div>
   );
 }

@@ -6,6 +6,43 @@ html, body {
   @apply bg-black text-white;
   /* @apply sans-serif; */
 }
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Apply this class to the card wrapper */
+.animated-border-card::before {
+  content: '';
+  position: absolute;
+  /* Make pseudo larger than parent padding. Adjust if card padding changes */
+  inset: -5px;
+  z-index: 0; /* Behind the image/content */
+  border-radius: inherit; /* Use parent's border radius */
+  /* The Conic Gradient - adjust colors/stops for glossiness */
+   background: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    transparent 60%,
+    #ffffffcc 75%, /* White with some transparency */
+    #aaaaaa88 80%, /* Grey with more transparency */
+    transparent 90%,
+    transparent 100%
+  );
+   /* Apply the animation */
+  animation: rotateBorder 5s linear infinite;
+}
+
+/* Define the keyframes (if not using Tailwind's theme extend) */
+/* It's often better to define @property and keyframes globally like this */
+@keyframes rotateBorder {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+
+
 @font-face {
   font-family: 'Gilroy';
   src: url('/fonts/Gilroy-Regular.woff2') format('woff2');
