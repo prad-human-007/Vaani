@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
+import { set } from "zod";
 
 export default function TestPage() {  
     const router = useRouter();
@@ -45,6 +46,8 @@ export default function TestPage() {
                 description: taskDescription
             })
         })
+        setTaskName("");
+        setTaskDescription("");
     }
 
     return (

@@ -4,7 +4,7 @@ const TestimonialSection = () => {
   // Replace with actual data or props
   const testimonial = {
     quote:
-      "“Coval's simulation and evaluation platform has been the game changer for us. Before Coval, we were spending countless hours pulling our hair out trying to make sure our voice agents behaved the way our customers wanted. Now, with a few tests we can deploy production ready voice AI agents in a fraction of the time.”",
+      "Vocalitycs's simulation and evaluation platform has been the game changer for us. Before Coval, we were spending countless hours pulling our hair out trying to make sure our voice agents behaved the way our customers wanted. Now, with a few tests we can deploy production ready voice AI agents in a fraction of the time.”",
     avatarUrl: "https://via.placeholder.com/100", // Replace with actual image URL
     name: "Will Bodewes",
     title: "CEO, Phonely",

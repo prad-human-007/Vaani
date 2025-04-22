@@ -6,7 +6,7 @@ export const  Navbar = () => {
       {/* Logo */}
       <div className="flex items-center">
         <a href="/" className="text-3xl font-bold">
-          COV<span className="relative">A</span>L
+          VOCALYTICS
         </a>
       </div>
       

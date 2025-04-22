@@ -7,7 +7,7 @@ function HowItWorks() {
     <div className="bg-black text-white min-h-screen py-16 px-4 sm:px-6 lg:px-8 flex flex-col items-center font-gilroy">
       {/* Main Title */}
       <h1 className="text-4xl md:text-5xl font-semibold mb-12 md:mb-16 text-center">
-        How Coval works
+        How Vocalitycs works
       </h1>
 
       {/* Content Container */}
@@ -23,7 +23,7 @@ function HowItWorks() {
             {/* bg-gray-900 is the inner background of the card */}
             <img
               src="https://framerusercontent.com/images/WGMheK9igaNhGCD3XKVrHwGS5Q.png?scale-down-to=1024"
-              alt="Coval chat conversation example"
+              alt="Vocalitycs chat conversation example"
               className="block w-full h-auto rounded-xl relative z-10"
               // rounded-xl is slightly smaller than parent's rounded-2xl
               // relative z-10 puts image above the ::before pseudo-element
@@ -68,7 +68,7 @@ function HowItWorks() {
             {/* bg-gray-900 is the inner background of the card */}
             <img
               src="https://framerusercontent.com/images/n0CH2ZEXAEnmopfQ1qPnZ8KY5qc.png?scale-down-to=1024"
-              alt="Coval chat conversation example"
+              alt="Vocalitycs chat conversation example"
               className="block w-full h-auto rounded-xl relative z-10"
               // rounded-xl is slightly smaller than parent's rounded-2xl
               // relative z-10 puts image above the ::before pseudo-element
