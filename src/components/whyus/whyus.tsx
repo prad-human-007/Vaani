@@ -27,7 +27,7 @@ const WhyUsSection = () => {
             Why us?
           </span>
           <h2 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-            Coval brings a decade of research in self-driving to conversational AI
+          Vocalitycs brings a decade of research in self-driving to conversational AI
           </h2>
         </div>
 
