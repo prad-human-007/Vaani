@@ -4,6 +4,7 @@ import { UserDropdown } from "@/components/home/user-dropdown";
 import { Hero } from "@/components/home/hero";
 import Image from "next/image";
 import { ModeToggle } from "@/components/mode-toggle";
+// import VisaPrepAIRedesign from "@/components/home/hero";
 
 export default async function Home() {
 
@@ -14,7 +15,7 @@ export default async function Home() {
     <div className="flex flex-col items-center justify-between w-full ">
 
       <div className="w-full">
-        <div className="flex justify-center w-full px-2">
+        {/* <div className="flex justify-center w-full px-2">
           <div className="flex flex-row shadow-xl rounded-2xl mt-3 w-full max-w-7xl justify-between items-center gap-3 p-3 bg-white bg-opacity-50"> 
            
             <a href="/" className="flex items-center font-extrabold italic text-2xl"> 
@@ -36,11 +37,11 @@ export default async function Home() {
               {user && <UserDropdown/> }
             </div>
           </div>
-        </div>
+        </div> */}
       </div>
 
       <Hero user={user}/>
-      
+      {/* <VisaPrepAIRedesign /> */}
       {/* FOOTER */}
       <div className="mt-5 flex flex-row gap-2 text-gray-700 mb-1">
         <a href="/terms" className="font-thin ">Terms & Conditions</a>
