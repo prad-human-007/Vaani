@@ -2,8 +2,59 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+html, body {
+  @apply bg-black text-white;
+  /* @apply sans-serif; */
+}
+
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+/* Apply this class to the card wrapper */
+.animated-border-card::before {
+  content: '';
+  position: absolute;
+  /* Make pseudo larger than parent padding. Adjust if card padding changes */
+  inset: -5px;
+  z-index: 0; /* Behind the image/content */
+  border-radius: inherit; /* Use parent's border radius */
+  /* The Conic Gradient - adjust colors/stops for glossiness */
+   background: conic-gradient(
+    from var(--angle),
+    transparent 0%,
+    transparent 60%,
+    #ffffffcc 75%, /* White with some transparency */
+    #aaaaaa88 80%, /* Grey with more transparency */
+    transparent 90%,
+    transparent 100%
+  );
+   /* Apply the animation */
+  animation: rotateBorder 5s linear infinite;
+}
+
+/* Define the keyframes (if not using Tailwind's theme extend) */
+/* It's often better to define @property and keyframes globally like this */
+@keyframes rotateBorder {
+  0% { --angle: 0deg; }
+  100% { --angle: 360deg; }
+}
+
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gilroy';
+  src: url('/fonts/Gilroy-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
 }
 
 @layer utilities {
@@ -79,47 +130,41 @@ body {
   }
 }
 
-.hero-grid {
+
+
+.ray-border {
   position: relative;
-  width: 100vw; /* Full viewport width */
-  height: 100vh; /* Full viewport height */
-  background-color: #ffffff; /* Light gray */
-  background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.1) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.1) 1px, transparent 1px);
-  background-size: 40px 40px; /* Adjust grid size */
+  z-index: 0;
+  overflow: hidden;
 }
 
-.hero-grid::before {
+.ray-border::before {
   content: "";
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(255, 0, 150, 0.5), transparent);
-  transform: translate(-50%, -50%);
+  inset: -2px; /* slightly outside the border */
+  background: conic-gradient(
+    from 0deg,
+    #ff00cc,
+    #3333ff,
+    #00ffee,
+    #ff00cc
+  );
+  animation: spin 2s linear infinite;
   z-index: -1;
+  mask: 
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box, 
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  -webkit-mask-composite: destination-out;
+  padding: 4px;
+  border-radius: 30px;
 }
 
-.dashboard-grid {
-  position: relative;
-  width: 100vw; /* Full viewport width */
-  height: 100vh; /* Full viewport height */
-  background-color: #ffffff; /* Light gray */
-  background-image: 
-    linear-gradient(to right, rgba(0, 0, 0, 0.05) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
-  background-size: 80px 80px; /* Adjust grid size */
+@keyframes spin {
+  to {
+    transform: rotate(1turn);
+  }
 }
-
-
-.landing-page {
-  background-image: url('/images/back2.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-attachment: fixed;
-}
-
-
