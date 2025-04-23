@@ -18,7 +18,7 @@ import { Plus } from "lucide-react";
 
 // Styles object for react-select dark theme
 const selectStyles = {
-  control: (baseStyles, state) => ({
+  control: (baseStyles:any, state:any) => ({
     ...baseStyles,
     backgroundColor: '#27272a', // zinc-800
     borderColor: state.isFocused ? '#52525b' : '#3f3f46', // zinc-600 / zinc-700
