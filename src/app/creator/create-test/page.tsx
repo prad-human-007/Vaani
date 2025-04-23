@@ -7,6 +7,16 @@ import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { set } from "zod";
 
+interface Task {
+    name: string;
+    description: string;
+    status: string;
+    min_age: number;
+    max_age: number;
+    gender: string;
+    language: string;
+}
+
 export default function TestPage() {  
     const router = useRouter();
     
@@ -15,6 +25,8 @@ export default function TestPage() {
     const [user, setUser] = useState<User | null>(null);
     const [token, setToken] = useState("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [tasks, setTasks] = useState<Task[]>([]);
+    
 
     useEffect(() => {
         const supabase = createClient();
