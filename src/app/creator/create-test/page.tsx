@@ -6,11 +6,11 @@ import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { set } from "zod";
+import { Plus } from "lucide-react";
 
 interface Task {
     name: string;
     description: string;
-    status: string;
     min_age: number;
     max_age: number;
     gender: string;
@@ -26,7 +26,7 @@ export default function TestPage() {
     const [token, setToken] = useState("");
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [tasks, setTasks] = useState<Task[]>([]);
-    
+
 
     useEffect(() => {
         const supabase = createClient();
@@ -72,8 +72,10 @@ export default function TestPage() {
                     createTest();
                 }}
             >
+                <Button><Plus/></Button>
                 <div>
                     <label htmlFor="taskName">Task Name</label>
+                    
                     <Input
                         id="taskName"
                         value={taskName}
@@ -83,6 +85,42 @@ export default function TestPage() {
                 </div>
                 <div>
                     <label htmlFor="taskDescription">Task Description</label>
+                    <Input
+                        id="taskDescription"
+                        value={taskDescription}
+                        onChange={(e) => setTaskDescription(e.target.value)}
+                        placeholder="Enter task description"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="taskDescription">Min age</label>
+                    <Input
+                        id="taskDescription"
+                        value={taskDescription}
+                        onChange={(e) => setTaskDescription(e.target.value)}
+                        placeholder="Enter task description"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="taskDescription">Max age</label>
+                    <Input
+                        id="taskDescription"
+                        value={taskDescription}
+                        onChange={(e) => setTaskDescription(e.target.value)}
+                        placeholder="Enter task description"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="taskDescription">Gender</label>
+                    <Input
+                        id="taskDescription"
+                        value={taskDescription}
+                        onChange={(e) => setTaskDescription(e.target.value)}
+                        placeholder="Enter task description"
+                    />
+                </div>
+                <div>
+                    <label htmlFor="taskDescription">Language</label>
                     <Input
                         id="taskDescription"
                         value={taskDescription}
