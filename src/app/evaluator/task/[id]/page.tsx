@@ -1,24 +1,24 @@
 'use client'
 import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
+import { useParams } from "next/navigation";
 
 export default function TestPage() {    
+    const params = useParams();
+    const id = params.id
+    console.log("ID:", id);
+
     const supabase = createClient();
     const age = 30;
     const language = "english";
     const gender = 'male'
 
-
     useEffect(() => {
-
         async function fetchTasks() {
             const { data, error } = await supabase
                 .from("tasks")
                 .select('*')
-                .eq('language', language)
-                .eq('gender', gender)
-                .gte('min_age', age)
-                .lte('max_age', age);
+                .eq('id', id)
 
             if (error) {
                 console.error("Error fetching tasks:", error);
