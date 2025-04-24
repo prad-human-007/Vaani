@@ -28,6 +28,7 @@ export async function POST(req: Request) {
     await isAuthenticated(req);
 
     const { name, description } = await req.json();
+    
     if (!name || !description) {
         return new NextResponse('Invalid request', { status: 400 });
     }

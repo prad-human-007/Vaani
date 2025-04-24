@@ -1,18 +1,61 @@
-import { ScoreCardList } from "@/components/profile/score-card-list"
-import { NewConversation } from "@/components/dashboard/NewConversation"
+'use client'
+import { Card } from "@/components/ui/card";
+import { createClient } from "@/utils/supabase/client";
+import { useEffect, useState } from "react";
 
-export default function History() {
+interface Test {
+    id: string
+    name: string;
+    description: string;
+}
+
+export default function TestPage() {    
+    const supabase = createClient();
+    const [tasks, setTasks] = useState<Test[]>([]);
+    const age = 30;
+    const language = "english";
+    const gender = 'male'
+
+
+    useEffect(() => {
+
+        async function fetchTasks() {
+            const { data, error } = await supabase
+                .from("tasks")
+                .select('id, name, description')
+                .eq('status', 'pending')
+                .in('language', [language, 'all'])
+                .in('gender', [gender, 'all'])
+                .lte('min_age', age)
+                .gte('max_age', age);
+
+            if (error) {
+                console.error("Error fetching tasks:", error);
+            }
+            else {
+                setTasks(data);
+                console.log("Tasks fetched:", data);
+            }
+        }
+        fetchTasks();
+    }, [])
+
     return (
-        <div className="flex flex-col gap-3 max-w-3xl w-full  min-h-screen h-full">
-            <div className="flex flex-col gap-3 ml-2">
-                <div className="flex flex-row items-center gap-5">
-                    <h1 className="text-3xl font-semibold">History</h1>
-                    <div className="border-r-2 border-gray-500 h-7"></div>
-                    <div><NewConversation/></div>
-                </div>
-                <h2 className="italic"> All Your past Interviews are present here</h2>
-            </div>
-            <ScoreCardList />
+        <div>
+            <h1>Test Page</h1>
+            <p>This is a test page.</p>
+            {tasks.map((task) => {
+                return (
+                    <div key={task.id} className="flex flex-col gap-2">
+                        <Card className="p-3">
+                            <h2>Task Name: {task.name}</h2>
+                            <p>Task Desc: {task.description}</p>
+                        </Card>
+                        
+                    </div>
+                )
+            })}
+            
         </div>
-    )
+    );
 }
