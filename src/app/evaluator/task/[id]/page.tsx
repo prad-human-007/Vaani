@@ -2,6 +2,7 @@
 import { createClient } from "@/utils/supabase/client";
 import { useEffect } from "react";
 import { useParams } from "next/navigation";
+import Orb from "@/components/vapi/orb";
 
 export default function TestPage() {    
     const params = useParams();
@@ -34,6 +35,7 @@ export default function TestPage() {
         <div>
             <h1>Test Page</h1>
             <p>This is a test page.</p>
+            <Orb />
         </div>
     );
 }
