@@ -46,13 +46,15 @@ export default function TestPage() {
             <p>This is a test page.</p>
             {tasks.map((task) => {
                 return (
-                    <div key={task.id} className="flex flex-col gap-2">
-                        <Card className="p-3">
+                    <a key={task.id} className="flex flex-col gap-2" href={`/evaluator/task/${task.id}`}>
+                        <Card 
+                            className="p-3 cursor-pointer" 
+                        >
                             <h2>Task Name: {task.name}</h2>
                             <p>Task Desc: {task.description}</p>
                         </Card>
                         
-                    </div>
+                    </a>
                 )
             })}
             
