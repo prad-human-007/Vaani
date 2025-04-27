@@ -1,19 +1,72 @@
 'use client'
 
-import { UserCircle, History } from "lucide-react";
-import { useRouter, usePathname} from "next/navigation";
+import { ClipboardList, User, LogOut, LayoutDashboard } from "lucide-react";
+import { useRouter, usePathname } from "next/navigation";
 
 export function Sidebar() {
     const router = useRouter();
     const pathname = usePathname();
-    return(
-        <div className="hidden md:flex">
-        <div className="flex flex-col gap-4 p-4 ">
-            <button className={`flex flex-row items-center gap-2 border border-gray-500 p-2 rounded-lg  ${pathname === '/account' ? '[box-shadow:0.25rem_0.25rem#000] translate-x-[-0.25rem] translate-y-[-0.25rem] bg-white' : 'bg-gray-200'} hover:bg-white`} onClick={() => router.push('/evaluator/tasks')}><UserCircle size={20}/> Tests</button>
-            <button className={`flex flex-row items-center gap-2 border border-gray-500 p-2 rounded-md  ${pathname === '/history' ? '[box-shadow:0.25rem_0.25rem#000] translate-x-[-0.25rem] translate-y-[-0.25rem] bg-white' : 'bg-gray-200 '} hover:bg-white`} onClick={() => router.push('/evaluator/dashboard')}><History size={20} /> Dashboard</button>                       
+
+    const navigation = [
+        { name: 'Dashboard', href: '/evaluator/dashboard', icon: LayoutDashboard },
+        { name: 'Tasks', href: '/evaluator/tasks', icon: ClipboardList },
+        { name: 'Profile', href: '/evaluator/profile', icon: User }
+        // Add more items here in the future if needed
+    ];
+
+    return (
+        // Ensure this div takes full height and uses flex column layout
+        // Added a background color assuming the parent might be white/light
+        <div className="h-full flex flex-col bg-gray-900 text-white p-4">
+            {/* Logo area - Prevent shrinking */}
+            <div className="flex items-center h-12 mb-4 flex-shrink-0">
+                <span className="text-xl font-bold text-white">TaskEvaluator</span>
+            </div>
+
+            {/* Navigation - Allow vertical scrolling ONLY if content overflows */}
+            {/* Removed flex-1/flex-grow, let it take natural height */}
+            {/* Added mb-4 for spacing below nav before the logout is pushed down */}
+            <nav className="space-y-1 overflow-y-auto mb-4">
+                {navigation.map((item) => {
+                    const isActive = pathname === item.href;
+                    return (
+                        <button
+                            key={item.name}
+                            onClick={() => router.push(item.href)}
+                            className={`
+                                w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-md
+                                transition-all duration-200 group
+                                ${isActive
+                                    ? 'bg-blue-900/50 text-blue-400 border-l-2 border-blue-500'
+                                    : 'text-gray-300 hover:bg-gray-800 hover:text-white'
+                                }
+                            `}
+                        >
+                            <item.icon
+                                className={`mr-3 h-5 w-5 flex-shrink-0 ${
+                                    isActive ? 'text-blue-400' : 'text-gray-400 group-hover:text-gray-300'
+                                }`}
+                                aria-hidden="true"
+                            />
+                            {item.name}
+                        </button>
+                    );
+                })}
+            </nav>
+
+            {/* Logout at bottom */}
+            {/* Use mt-auto to push this element to the bottom of the flex container */}
+            {/* Added pt-4 for spacing above logout after the border */}
+            {/* Added flex-shrink-0 to prevent shrinking */}
+            <div className="mt-auto pt-4 border-t border-gray-800 flex-shrink-0">
+                <button
+                    onClick={() => router.push('/logout')} // Ensure '/logout' is your actual logout route
+                    className="w-full flex items-center px-3 py-2.5 text-sm font-medium rounded-md text-red-400 hover:bg-gray-800 hover:text-red-300 transition-colors duration-200 group"
+                >
+                    <LogOut className="mr-3 h-5 w-5 flex-shrink-0 text-red-400 group-hover:text-red-300" aria-hidden="true" />
+                    Log out
+                </button>
+            </div>
         </div>
-        <div className=" border-r border-gray-500 "></div>
-        </div>
-    )
-    
+    );
 }
