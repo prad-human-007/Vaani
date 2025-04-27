@@ -17,7 +17,7 @@ export function Sidebar() {
     return (
         // Ensure this div takes full height and uses flex column layout
         // Added a background color assuming the parent might be white/light
-        <div className="h-full flex flex-col bg-gray-900 text-white p-4">
+        <div className="h-full flex flex-col bg-black text-white p-4">
             {/* Logo area - Prevent shrinking */}
             <div className="flex items-center h-12 mb-4 flex-shrink-0">
                 <span className="text-xl font-bold text-white">TaskEvaluator</span>
