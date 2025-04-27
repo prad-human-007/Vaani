@@ -66,11 +66,11 @@ export default function Dashboard() {
 
             {/* Stats cards */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
-                <Card className="p-5 bg-gray-900 border border-gray-800">
+                <Card className="p-5 bg-[#303030] border border-gray-800">
                     <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">TASKS COMPLETED</h3>
                     <p className="text-3xl font-bold mt-1 text-blue-400">{completedTasks}</p>
                 </Card>
-                <Card className="p-5 bg-gray-900 border border-gray-800">
+                <Card className="p-5 bg-[#303030] border border-gray-800">
                     <h3 className="text-sm font-medium text-gray-400 uppercase tracking-wider">TOTAL EARNINGS</h3>
                     <p className="text-3xl font-bold mt-1 text-green-400">${totalEarnings.toFixed(2)}</p>
                 </Card>
@@ -115,7 +115,7 @@ export default function Dashboard() {
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
                     {tasks.map((task) => (
                         <a key={task.id} href={`/evaluator/task/${task.id}`} className="block transition hover:translate-y-[-2px]">
-                            <Card className="h-full hover:shadow-md transition-all duration-200 bg-gray-900 border border-gray-800 overflow-hidden">
+                            <Card className="h-full hover:shadow-md transition-all duration-200 bg-[#303030] border border-gray-800 overflow-hidden">
                                 {/* Colored top strip */}
                                 <div className="h-1 bg-blue-500 w-full"></div>
 
