@@ -18,7 +18,9 @@ import { Plus } from "lucide-react";
 
 // Styles object for react-select dark theme
 const selectStyles = {
+
   control: (baseStyles: any, state: any) => ({
+
     ...baseStyles,
     backgroundColor: "#27272a", // zinc-800
     borderColor: state.isFocused ? "#52525b" : "#3f3f46", // zinc-600 / zinc-700
@@ -35,9 +37,11 @@ const selectStyles = {
   }),
   input: (baseStyles) => ({
     ...baseStyles,
+
     color: "#e4e4e7", // zinc-200
     margin: "0px",
     padding: "0px",
+
   }),
   indicatorSeparator: () => ({
     display: "none",
@@ -48,12 +52,14 @@ const selectStyles = {
   }),
   singleValue: (baseStyles) => ({
     ...baseStyles,
+
     color: "#e4e4e7", // zinc-200
   }),
   menu: (baseStyles) => ({
     ...baseStyles,
     backgroundColor: "#27272a", // zinc-800
     border: "1px solid #3f3f46", // zinc-700
+
   }),
   option: (baseStyles, state) => ({
     ...baseStyles,
@@ -113,7 +119,7 @@ export default function CreateTest() {
     languages: [],
     gender: "",
     instruction: "",
-    numberOfPeople: 2,
+    numberOfPeople: 2, // Default to 2 participants
   });
 
   const languageOptions = [
@@ -132,6 +138,7 @@ export default function CreateTest() {
 
   // Opens the modal and resets modal state
   const handleAddGroup = () => {
+
     setTestDetails({
       // Reset modal form fields
       name: "",
@@ -145,16 +152,18 @@ export default function CreateTest() {
     });
     // Reset currentGroup as well, ensuring no lingering data
     // setCurrentGroup({ name: "", description: "", people: [] });
+
     setShowModal(true);
   };
 
   // Takes data from modal, populates currentGroup, closes modal
   const handleTestDetailsSubmit = () => {
     if (!testDetails.name || !testDetails.desc) {
-      // Add some basic validation feedback if desired
+      // Add some basic validation feedback
       alert("Please provide a name and description for the test group.");
       return;
     }
+
     const peopleArray :any = Array(parseInt(testDetails.numberOfPeople, 10) || 0)
       .fill()
       .map(() => ({
@@ -168,12 +177,14 @@ export default function CreateTest() {
         languages: testDetails.languages,
         instruction: testDetails.instruction,
         // people: [...prevState.people, ...peopleArray],
+
       }));
     console.log(currentGroup, "crasdasda",testGroups);
     setCurrentGroup((prevState:any) => ({
       ...prevState,
       name: testDetails.name,
       description: testDetails.desc,
+
       ageRange:
         testDetails.age && testDetails.ageEnd
           ? `${testDetails.age}-${testDetails.ageEnd}`
@@ -184,29 +195,38 @@ export default function CreateTest() {
       people: [...prevState.people, ...peopleArray],
     }));
 
+
     setShowModal(false);
   };
 
   // Updates details for a specific person within the currentGroup
   const handlePersonChange = (index, field, value) => {
     const updatedPeople = [...currentGroup.people];
-    updatedPeople[index] = {
-      ...updatedPeople[index],
-      [field]: value,
-    };
+    // Ensure the object exists before trying to update it
+    if (updatedPeople[index]) {
+         updatedPeople[index] = {
+           ...updatedPeople[index],
+           [field]: value,
+         };
 
-    setCurrentGroup({
-      ...currentGroup,
-      people: updatedPeople,
-    });
+         setCurrentGroup({
+           ...currentGroup,
+           people: updatedPeople,
+         });
+    } else {
+        console.error("Attempted to update non-existent person at index:", index);
+    }
   };
 
   // Submits the currentGroup to the testGroups list and resets currentGroup
+
   const handleSubmitTestGroup = async () => {
     // Add validation if needed (e.g., check if all people details are filled)
+
     if (currentGroup.name && currentGroup.description) {
       // First add the group to the UI
       setTestGroups([...testGroups, currentGroup]);
+
       
       // Format data for API
       const formattedData = currentGroup.people.map(person => ({
@@ -253,6 +273,7 @@ export default function CreateTest() {
         console.error('Error submitting test group:', error);
         alert('Failed to submit test group. Please try again.');
       }
+
     } else {
       // Should not happen if button is disabled correctly, but good practice
       alert("Cannot submit an empty group.");
@@ -283,7 +304,9 @@ export default function CreateTest() {
             <Button
               variant="outline"
               onClick={handleSubmitTestGroup}
+
               disabled={!currentGroup.name}
+
               className="bg-emerald-600 text-white border-emerald-700 hover:bg-emerald-700 hover:text-white disabled:opacity-50 disabled:cursor-not-allowed disabled:bg-zinc-800 disabled:border-zinc-700 disabled:text-gray-400"
             >
               Submit Group
@@ -302,6 +325,7 @@ export default function CreateTest() {
               <table className="w-full text-sm text-left text-gray-400">
                 <thead className="text-xs text-gray-300 uppercase bg-zinc-700/50">
                   <tr>
+
                     <th scope="col" className="px-4 py-3">
                       Name
                     </th>
@@ -333,6 +357,7 @@ export default function CreateTest() {
                       key={groupIndex}
                       className="bg-zinc-800 hover:bg-zinc-700/50"
                       >
+
                       <td className="px-4 py-3 font-medium text-white whitespace-nowrap">
                         {group.people[groupIndex].name || "-"}
                       </td>
@@ -357,18 +382,33 @@ export default function CreateTest() {
                           : group.instruction
                         : "-"}
                       </td>
+                      <td className="px-4 py-3 text-gray-300">
+                        {group.ageRange || "Any"}
+                      </td>
+                      <td className="px-4 py-3 text-gray-300">
+                        {group.gender || "Any"}
+                      </td>
+                      <td className="px-4 py-3 text-gray-300">
+                        {group.languages.length > 0 ? group.languages.map(lang => lang?.label || lang).join(", ") : "Any"}
+                      </td>
+                      <td className="px-4 py-3 text-gray-300">
+                        {group.instruction || "N/A"}
+                      </td>
                       <td className="px-4 py-3 text-center text-gray-300">
                         {group.people.length}
                       </td>
+
                       </tr>
                     );
                     })}
+
                 </tbody>
               </table>
             </div>
           )}
           {/* --- End of Table --- */}
           {/* --- End of Table --- */}
+
 
           {/* --- Participants Table for Current Group --- */}
           {currentGroup.name && currentGroup.people.length > 0 && (
@@ -443,6 +483,7 @@ export default function CreateTest() {
 
           {/* --- End of Current Group Form --- */}
 
+
           {/* Placeholder when no group is being edited */}
           {!currentGroup.name && testGroups.length === 0 && (
             <p className="text-center text-gray-500 mt-6">
@@ -451,7 +492,9 @@ export default function CreateTest() {
           )}
           {!currentGroup.name && testGroups.length > 0 && (
             <p className="text-center text-gray-500 mt-6">
+
               Click the '+' button to add another test group.
+
             </p>
           )}
         </CardContent>
@@ -479,11 +522,14 @@ export default function CreateTest() {
               <Input
                 id="modal-name"
                 value={testDetails.name}
+
                 onChange={(e) =>
                   setTestDetails({ ...testDetails, name: e.target.value })
                 }
                 className="bg-zinc-800 border-zinc-700 text-white"
+
                 placeholder="e.g., Pilot Study Alpha"
+                required
               />
             </div>
 
@@ -494,11 +540,14 @@ export default function CreateTest() {
               <Input
                 id="modal-desc"
                 value={testDetails.desc}
+
                 onChange={(e) =>
                   setTestDetails({ ...testDetails, desc: e.target.value })
                 }
                 className="bg-zinc-800 border-zinc-700 text-white"
+
                 placeholder="Brief description of the group's purpose"
+                required
               />
             </div>
 
@@ -511,30 +560,39 @@ export default function CreateTest() {
                   id="age"
                   type="number"
                   placeholder="Start"
+                  min="0"
                   value={testDetails.age}
+
                   onChange={(e) =>
                     setTestDetails({ ...testDetails, age: e.target.value })
                   }
                   className="bg-zinc-800 border-zinc-700 text-white"
+
                 />
+                 <span className="flex items-center text-gray-400">-</span>
                 <Input
                   id="ageEnd"
                   type="number"
                   placeholder="End"
+                  min={testDetails.age || "0"} // Ensure end age is not less than start age
                   value={testDetails.ageEnd}
+
                   onChange={(e) =>
                     setTestDetails({ ...testDetails, ageEnd: e.target.value })
                   }
                   className="bg-zinc-800 border-zinc-700 text-white"
+
                 />
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
               <div>
                 <Label htmlFor="modal-gender" className="text-gray-300">
                   Target Gender (Optional)
                 </Label>
+
                 <Select
                   inputId="modal-gender"
                   value={genderOptions.find(
@@ -553,19 +611,23 @@ export default function CreateTest() {
                 />
               </div>
 
+
               <div>
                 <Label htmlFor="modal-languages" className="text-gray-300">
                   Target Languages (Optional)
                 </Label>
+
                 <Select
                   inputId="modal-languages"
                   isMulti
                   options={languageOptions}
+
                   value={testDetails.languages
                     .map((lang) =>
                       languageOptions.find((option) => option.value === lang)
                     )
                     .filter(Boolean)}
+
                   onChange={(selectedOptions) =>
                     setTestDetails({
                       ...testDetails,
@@ -588,6 +650,7 @@ export default function CreateTest() {
               <Textarea
                 id="instruction"
                 value={testDetails.instruction}
+
                 onChange={(e) =>
                   setTestDetails({
                     ...testDetails,
@@ -595,6 +658,7 @@ export default function CreateTest() {
                   })
                 }
                 className="h-20 bg-zinc-800 border-zinc-700 text-white"
+
                 placeholder="Optional instructions for this group"
               />
             </div>
@@ -608,17 +672,19 @@ export default function CreateTest() {
                 type="number"
                 min="1"
                 value={testDetails.numberOfPeople}
+
                 onChange={(e) =>
                   setTestDetails({
                     ...testDetails,
                     numberOfPeople: Math.max(1, parseInt(e.target.value) || 1),
                   })
                 }
+
                 className="w-32 bg-zinc-800 border-zinc-700 text-white"
+                required
               />
             </div>
           </div>
-          {/* End Modal Form Grid */}
 
           <DialogFooter>
             <Button
