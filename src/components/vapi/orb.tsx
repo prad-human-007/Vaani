@@ -4,8 +4,8 @@ import * as THREE from "three";
 import { createNoise3D } from "simplex-noise";
 import useVapi from "@/hooks/use-vapi";
 
-const Orb: React.FC = () => {
-  const { volumeLevel, isSessionActive, toggleCall } = useVapi();
+const Orb: React.FC<{ onShowRatingDialogChange: (value: boolean) => void }> = ({ onShowRatingDialogChange }) => {
+  const { volumeLevel, isSessionActive, toggleCall, showRatingDialog, setShowRatingDialog } = useVapi();
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const groupRef = useRef<THREE.Group | null>(null);
@@ -26,27 +26,21 @@ const Orb: React.FC = () => {
   useEffect(() => {
     if (isSessionActive && ballRef.current) {
       console.log("Session is active, morphing the ball");
+      setShowRatingDialog(false); // Close rating dialog if open
+      onShowRatingDialogChange(false); // Notify parent
       updateBallMorph(ballRef.current, volumeLevel);
-    } else if (
-      !isSessionActive &&
-      ballRef.current &&
-      originalPositionsRef.current
-    ) {
+    } else if (!isSessionActive && ballRef.current && originalPositionsRef.current) {
       console.log("Session ended, resetting the ball");
+      setShowRatingDialog(true); // Show rating dialog
+      onShowRatingDialogChange(true); // Notify parent
       resetBallMorph(ballRef.current, originalPositionsRef.current);
     }
   }, [volumeLevel, isSessionActive]);
 
   const initViz = () => {
-    console.log("Initializing Three.js visualization...");
     const scene = new THREE.Scene();
     const group = new THREE.Group();
-    const camera = new THREE.PerspectiveCamera(
-      45,
-      window.innerWidth / window.innerHeight,
-      0.5,
-      100,
-    );
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.5, 100);
     camera.position.set(0, 0, 100);
     camera.lookAt(scene.position);
 
@@ -69,9 +63,7 @@ const Orb: React.FC = () => {
     ball.position.set(0, 0, 0);
     ballRef.current = ball;
 
-    // Store the original positions of the vertices
-    originalPositionsRef.current =
-      ball.geometry.attributes.position.array.slice();
+    originalPositionsRef.current = ball.geometry.attributes.position.array.slice();
 
     group.add(ball);
 
@@ -98,13 +90,7 @@ const Orb: React.FC = () => {
   };
 
   const render = () => {
-    if (
-      !groupRef.current ||
-      !ballRef.current ||
-      !cameraRef.current ||
-      !rendererRef.current ||
-      !sceneRef.current
-    ) {
+    if (!groupRef.current || !ballRef.current || !cameraRef.current || !rendererRef.current || !sceneRef.current) {
       return;
     }
 
@@ -118,18 +104,13 @@ const Orb: React.FC = () => {
 
     const outElement = document.getElementById("out");
     if (outElement) {
-      cameraRef.current.aspect =
-        outElement.clientWidth / outElement.clientHeight;
+      cameraRef.current.aspect = outElement.clientWidth / outElement.clientHeight;
       cameraRef.current.updateProjectionMatrix();
-      rendererRef.current.setSize(
-        outElement.clientWidth,
-        outElement.clientHeight,
-      );
+      rendererRef.current.setSize(outElement.clientWidth, outElement.clientHeight);
     }
   };
 
   const updateBallMorph = (mesh: THREE.Mesh, volume: number) => {
-    console.log("Morphing the ball with volume:", volume);
     const geometry = mesh.geometry as THREE.BufferGeometry;
     const positionAttribute = geometry.getAttribute("position");
 
@@ -164,11 +145,7 @@ const Orb: React.FC = () => {
     geometry.computeVertexNormals();
   };
 
-  const resetBallMorph = (
-    mesh: THREE.Mesh,
-    originalPositions: Float32Array,
-  ) => {
-    console.log("Resetting the ball to its original shape");
+  const resetBallMorph = (mesh: THREE.Mesh, originalPositions: Float32Array) => {
     const geometry = mesh.geometry as THREE.BufferGeometry;
     const positionAttribute = geometry.getAttribute("position");
 
