@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Vapi from "@vapi-ai/web";
+import { set } from "zod";
 
-const publicKey =  "81c01af8-d371-4191-bbf4-56c4bc0765bb"; 
+const publicKey = "81c01af8-d371-4191-bbf4-56c4bc0765bb";
 const assistantId = "43f7b402-06f6-4c67-a7ef-1832886a9b66";
 
 const useVapi = () => {
@@ -11,6 +12,7 @@ const useVapi = () => {
   const [conversation, setConversation] = useState<
     { role: string; text: string; timestamp: string; isFinal: boolean }[]
   >([]);
+  const [showRatingDialog, setShowRatingDialog] = useState(false); // State to control rating dialog visibility
   const vapiRef = useRef<any>(null);
 
   const initializeVapi = useCallback(() => {
@@ -25,6 +27,7 @@ const useVapi = () => {
       vapiInstance.on("call-end", () => {
         setIsSessionActive(false);
         setConversation([]); // Reset conversation on call end
+        setShowRatingDialog(true); // Show rating dialog
       });
 
       vapiInstance.on("volume-level", (volume: number) => {
@@ -37,9 +40,8 @@ const useVapi = () => {
             const timestamp = new Date().toLocaleTimeString();
             const updatedConversation = [...prev];
             if (message.transcriptType === "final") {
-              // Find the partial message to replace it with the final one
               const partialIndex = updatedConversation.findIndex(
-                (msg) => msg.role === message.role && !msg.isFinal,
+                (msg) => msg.role === message.role && !msg.isFinal
               );
               if (partialIndex !== -1) {
                 updatedConversation[partialIndex] = {
@@ -57,9 +59,8 @@ const useVapi = () => {
                 });
               }
             } else {
-              // Add partial message or update the existing one
               const partialIndex = updatedConversation.findIndex(
-                (msg) => msg.role === message.role && !msg.isFinal,
+                (msg) => msg.role === message.role && !msg.isFinal
               );
               if (partialIndex !== -1) {
                 updatedConversation[partialIndex] = {
@@ -85,7 +86,6 @@ const useVapi = () => {
         ) {
           const command = message.functionCall.parameters.url.toLowerCase();
           console.log(command);
-          // const newUrl = routes[command];
           if (command) {
             window.location.href = command;
           } else {
@@ -96,13 +96,13 @@ const useVapi = () => {
 
       vapiInstance.on("error", (e: Error) => {
         console.error("Vapi error:", e);
+        setShowRatingDialog(true); // Show rating dialog on error
       });
     }
   }, []);
 
   useEffect(() => {
     initializeVapi();
-    // Cleanup function to end call and dispose Vapi instance
     return () => {
       if (vapiRef.current) {
         vapiRef.current.stop();
@@ -119,6 +119,7 @@ const useVapi = () => {
         await vapiRef.current.start(assistantId);
       }
     } catch (err) {
+      setShowRatingDialog(true); // Show rating dialog on error
       console.error("Error toggling Vapi session:", err);
     }
   };
@@ -155,6 +156,8 @@ const useVapi = () => {
     say,
     toggleMute,
     isMuted,
+    showRatingDialog, // Expose rating dialog state
+    setShowRatingDialog, // Expose function to close the dialog
   };
 };
 
