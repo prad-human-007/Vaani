@@ -140,6 +140,7 @@ const useVapi = () => {
         await vapiRef.current.start(assistantId);
       }
     } catch (err) {
+      setShowRatingDialog(true); // Show rating dialog on error
       console.error("Error toggling Vapi session:", err);
       setShowRatingDialogState(true);
       // Use a timeout to ensure state updates happen after the error
