@@ -64,7 +64,7 @@ export default function TaskList() {
         {tasks.map((task) => (
           <a
             key={task.id}
-            href={`/evaluator/task/${task.id}`}
+            href={`/tester/task/${task.id}`}
             className="block transition hover:translate-y-[-2px]"
           >
             <Card className="h-full hover:shadow-md transition-all duration-200 bg-gray-900 border border-gray-800 overflow-hidden">

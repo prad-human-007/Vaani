@@ -8,9 +8,9 @@ export function Sidebar() {
     const pathname = usePathname();
 
     const navigation = [
-        { name: 'Dashboard', href: '/evaluator/dashboard', icon: LayoutDashboard },
-        { name: 'Tasks', href: '/evaluator/tasks', icon: ClipboardList },
-        { name: 'Profile', href: '/evaluator/profile', icon: User }
+        { name: 'Dashboard', href: '/tester/dashboard', icon: LayoutDashboard },
+        { name: 'Tasks', href: '/tester/tasks', icon: ClipboardList },
+        { name: 'Profile', href: '/tester/profile', icon: User }
         // Add more items here in the future if needed
     ];
 
