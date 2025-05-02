@@ -3,7 +3,8 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { createNoise3D } from "simplex-noise";
 import useVapi from "@/hooks/use-vapi";
-
+import { showRatingDialogAtom } from "@/atom/ratingatom";
+import { useAtom } from "jotai";
 const Orb: React.FC<{ onShowRatingDialogChange: (value: boolean) => void }> = ({ onShowRatingDialogChange }) => {
   const { volumeLevel, isSessionActive, toggleCall, showRatingDialog, setShowRatingDialog } = useVapi();
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -12,6 +13,7 @@ const Orb: React.FC<{ onShowRatingDialogChange: (value: boolean) => void }> = ({
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const ballRef = useRef<THREE.Mesh | null>(null);
   const originalPositionsRef = useRef<any | null>(null);
+  const [showRatingDialogState, setShowRatingDialogState] = useAtom(showRatingDialogAtom);
   const noise = createNoise3D();
 
   useEffect(() => {
@@ -25,14 +27,15 @@ const Orb: React.FC<{ onShowRatingDialogChange: (value: boolean) => void }> = ({
 
   useEffect(() => {
     if (isSessionActive && ballRef.current) {
-      console.log("Session is active, morphing the ball");
-      setShowRatingDialog(false); // Close rating dialog if open
-      onShowRatingDialogChange(false); // Notify parent
+      console.log("Session is active, morphing the ball",showRatingDialog);
+      // setShowRatingDialog(false); // Close rating dialog if open
+      // onShowRatingDialogChange(false); // Notify parent
       updateBallMorph(ballRef.current, volumeLevel);
     } else if (!isSessionActive && ballRef.current && originalPositionsRef.current) {
       console.log("Session ended, resetting the ball");
+      setShowRatingDialog(true); // Close rating dialog if open
       setShowRatingDialog(true); // Show rating dialog
-      onShowRatingDialogChange(true); // Notify parent
+      // onShowRatingDialogChange(true); // Notify parent
       resetBallMorph(ballRef.current, originalPositionsRef.current);
     }
   }, [volumeLevel, isSessionActive]);
