@@ -15,6 +15,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { CloseIcon } from "@/components/livekit/CloseIcon";
 import { showRatingDialogAtom } from "@/atom/ratingatom";
 import { useAtom } from "jotai";
+
 export default function TestPage() {
   const { isSessionActive, showRatingDialog, setShowRatingDialog } = useVapi();
   const [showRatingDialogState, setShowRatingDialogState] =
@@ -75,14 +76,9 @@ export default function TestPage() {
       {/* Rating Dialog */}
       <Dialog
         open={showRatingDialogState}
-        // onOpenChange={(open) => {
-        //   console.log('Dialog onOpenChange:', open);
-        //   setShowRatingDialog(open);
-        // }}
         onOpenChange={(open) => setShowRatingDialog(open)}
       >
         <DialogContent className="max-w-sm p-0 overflow-visible">
-          
           <div className="flex rounded-md flex-col items-center py-4 bg-gray-900">
             <p className="text-gray-300 mb-2 text-base font-medium">
               How was your experience?
@@ -120,15 +116,14 @@ export default function TestPage() {
               placeholder="Optional feedback..."
               value={feedback}
               onChange={(e) => setFeedback(e.target.value)}
-              disabled={selectedRating !== null}
-              rows={3}
             />
             <Button
-              variant="ghost"
+              className="mt-2"
+              variant="secondary"
               onClick={handleDialogClose}
-              className="mt-2 text-gray-300 hover:bg-gray-700 hover:text-gray-100"
             >
-              Maybe Later
+              <CloseIcon className="mr-2 h-4 w-4" />
+              Close
             </Button>
           </div>
         </DialogContent>

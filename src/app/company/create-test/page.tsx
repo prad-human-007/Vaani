@@ -359,7 +359,9 @@ export default function CreateTest() {
                       >
 
                       <td className="px-4 py-3 font-medium text-white whitespace-nowrap">
+
                         {group.name}
+
                       </td>
                       <td className="px-4 py-3 text-gray-300">
                         {group.instruction || "N/A"}
