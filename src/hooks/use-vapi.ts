@@ -36,6 +36,7 @@ const useVapi = () => {
       vapiInstance.on("call-end", () => {
         console.log('Call ended');
         setIsSessionActive("completed");
+        setShowRatingDialogState(true);
         setConversation([]);
         setShowRatingDialog(true);
       });
