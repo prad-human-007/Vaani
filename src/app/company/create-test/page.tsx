@@ -359,37 +359,9 @@ export default function CreateTest() {
                       >
 
                       <td className="px-4 py-3 font-medium text-white whitespace-nowrap">
-                        {group.people[groupIndex].name || "-"}
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">
-                      {group.people[groupIndex].description || "-"}
-                       
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">
-                       
-                        {group.people[groupIndex].ageRange || "-"}
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">
-                      {group.people[groupIndex].gender || "-"}
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">
-                        {formatLanguages(group.people[groupIndex].languages)}
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">
-                        {group.instruction
-                        ? group.instruction.length > 20
-                          ? `${group.instruction.substring(0, 20)}...`
-                          : group.instruction
-                        : "-"}
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">
-                        {group.ageRange || "Any"}
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">
-                        {group.gender || "Any"}
-                      </td>
-                      <td className="px-4 py-3 text-gray-300">
-                        {group.languages.length > 0 ? group.languages.map(lang => lang?.label || lang).join(", ") : "Any"}
+
+                        {group.name}
+
                       </td>
                       <td className="px-4 py-3 text-gray-300">
                         {group.instruction || "N/A"}
