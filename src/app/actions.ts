@@ -7,19 +7,23 @@ import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
 import { cookies } from 'next/headers';
 import { Database } from '@/types/supabase'; // Adjust path if needed
 
-
 export async function signUpAction(formData: FormData) {
   const supabase = createServerActionClient<Database>({ cookies });
-   console.log(formData);
+  console.log(formData);
+
   // Extract form fields
   const email = formData.get('email') as string;
   const password = formData.get('password') as string;
   const role = formData.get('role') as string;
   const profession = formData.get('profession') as string;
-  const languagesRaw = formData.get('languages') as string; // e.g. "English, Hindi"
-  const languages = languagesRaw.split(',').map(lang => lang.trim());
+  const languagesRaw = formData.get('languages') as string | null; // e.g. "English, Hindi"
+  
+  // Handle case where 'languages' is null
+  const languages = languagesRaw ? languagesRaw.split(',').map(lang => lang.trim()) : []; // Default to empty array if null
+  
   const linkedin_url = formData.get('linkedin_url') as string;
   const gender = formData.get('gender') as string;
+  const companyName = formData.get('company_name') as string;  // Added for company
 
   // Sign up user
   const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
@@ -34,9 +38,9 @@ export async function signUpAction(formData: FormData) {
 
   const userId = signUpData.user?.id;
 
-  // Insert additional profile data into a custom table (e.g., "tester")
+  // Insert additional profile data into a custom table (e.g., "tester" or "company")
   if (userId && role === 'tester') {
-    const { error: insertError } = await supabase.from('tester').insert([
+    const { error: insertTesterError } = await supabase.from('tester').insert([
       {
         id: userId, // FK to auth.users
         email,
@@ -47,15 +51,33 @@ export async function signUpAction(formData: FormData) {
       },
     ]);
 
-    if (insertError) {
-      console.error('Tester insert error:', insertError.message);
-      return { error: insertError.message };
+    if (insertTesterError) {
+      console.error('Tester insert error:', insertTesterError.message);
+      return { error: insertTesterError.message };
+    }
+  }
+
+  if (userId && role === 'company') {
+    const { error: insertCompanyError } = await supabase.from('company').insert([
+      {
+        id: userId, // FK to auth.users
+        email,
+        company_name: companyName,  // Added company name field
+        profession,
+        languages,
+        linkedin_url,
+        gender,
+      },
+    ]);
+
+    if (insertCompanyError) {
+      console.error('Company insert error:', insertCompanyError.message);
+      return { error: insertCompanyError.message };
     }
   }
 
   return { success: true };
 }
-
 
 // === SIGN IN WITH OAUTH (Google) ===
 export const signInwithOAuthAction = async () => {
