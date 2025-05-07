@@ -1,9 +1,23 @@
-import { createBrowserClient } from '@supabase/ssr'
+import { createClient as createSupabaseClient } from '@supabase/supabase-js'; // Changed to avoid conflict
+import { cookies } from "next/headers";
 
+//  Removed the custom createClient, using the one from supabase-js directly
 export function createClient() {
-  // Create a supabase client on the browser with project's credentials
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+    if (!supabaseUrl) {
+        console.error("NEXT_PUBLIC_SUPABASE_URL is not defined");
+        throw new Error("NEXT_PUBLIC_SUPABASE_URL is not defined");
+    }
+    if (!supabaseKey) {
+        console.error("NEXT_PUBLIC_SUPABASE_ANON_KEY is not defined");
+        throw new Error("NEXT_PUBLIC_SUPABASE_ANON_KEY is not defined");
+    }
+
+    return createSupabaseClient(supabaseUrl, supabaseKey, { // Use createSupabaseClient
+        global: {
+            headers: { 'Content-Type': 'application/json' },
+        },
+    });
 }

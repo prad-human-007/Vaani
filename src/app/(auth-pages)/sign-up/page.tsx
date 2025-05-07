@@ -13,36 +13,50 @@ export default function Signup({ searchParams }: { searchParams: Promise<Message
   const [role, setRole] = useState("tester");
 
   return (
-    <div className="flex w-full h-screen justify-center items-center">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <h1 className="text-2xl font-medium">Sign up</h1>
-          <p className="text-sm text-foreground">
+    <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white px-4">
+      <Card className="w-full max-w-lg bg-gray-900 border border-gray-700 shadow-xl rounded-2xl">
+        <CardHeader className="text-center pt-6">
+          <h1 className="text-3xl font-bold text-white">Create an account</h1>
+          <p className="mt-2 text-sm text-gray-400">
             Already have an account?{" "}
-            <Link className="text-primary font-medium underline" href="/sign-in">
+            <Link href="/sign-in" className="text-blue-400 hover:underline">
               Sign in
             </Link>
           </p>
         </CardHeader>
-        <CardContent>
-          <form className="flex flex-col gap-4" action={signUpAction}>
+
+        <CardContent className="px-6 pb-8">
+          <form className="flex flex-col gap-5" action={signUpAction}>
             {/* Email & Password */}
             <div>
               <Label htmlFor="email">Email</Label>
-              <Input type="email" name="email" placeholder="you@example.com" required />
+              <Input
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                required
+                className="bg-gray-800 border-gray-700 text-white"
+              />
             </div>
             <div>
               <Label htmlFor="password">Password</Label>
-              <Input type="password" name="password" placeholder="Your password" minLength={6} required />
+              <Input
+                type="password"
+                name="password"
+                placeholder="Your password"
+                minLength={6}
+                required
+                className="bg-gray-800 border-gray-700 text-white"
+              />
             </div>
 
-            {/* Role Selection */}
+            {/* Role */}
             <div>
               <Label htmlFor="role">Role</Label>
               <select
                 name="role"
                 onChange={(e) => setRole(e.target.value)}
-                className="border p-2 rounded w-full"
+                className="bg-gray-800 border border-gray-700 rounded px-3 py-2 w-full"
               >
                 <option value="tester">Tester</option>
                 <option value="company">Company</option>
@@ -54,15 +68,21 @@ export default function Signup({ searchParams }: { searchParams: Promise<Message
               <>
                 <div>
                   <Label htmlFor="name">Company Name</Label>
-                  <Input name="name" placeholder="Acme Inc." required />
+                  <Input name="name" placeholder="Acme Inc." required className="bg-gray-800 border-gray-700 text-white" />
                 </div>
                 <div>
                   <Label htmlFor="sector">Sector</Label>
-                  <Input name="sector" placeholder="Healthcare, Education..." required />
+                  <Input name="sector" placeholder="Healthcare, Education..." required className="bg-gray-800 border-gray-700 text-white" />
                 </div>
                 <div>
                   <Label htmlFor="url">Company Test URL</Label>
-                  <Input type="url" name="url" placeholder="https://yourdomain.com" required />
+                  <Input
+                    type="url"
+                    name="url"
+                    placeholder="https://yourdomain.com"
+                    required
+                    className="bg-gray-800 border-gray-700 text-white"
+                  />
                 </div>
               </>
             )}
@@ -72,7 +92,11 @@ export default function Signup({ searchParams }: { searchParams: Promise<Message
               <>
                 <div>
                   <Label htmlFor="profession">Profession</Label>
-                  <select name="profession" className="border p-2 rounded w-full" required>
+                  <select
+                    name="profession"
+                    required
+                    className="bg-gray-800 border border-gray-700 rounded px-3 py-2 w-full text-white"
+                  >
                     <option value="">Select Profession</option>
                     <option value="UX Researcher">UX Researcher</option>
                     <option value="QA Engineer">QA Engineer</option>
@@ -91,8 +115,8 @@ export default function Signup({ searchParams }: { searchParams: Promise<Message
                   <select
                     name="languages"
                     multiple
-                    className="border p-2 rounded w-full h-32"
                     required
+                    className="bg-gray-800 border border-gray-700 rounded px-3 py-2 w-full text-white h-32"
                   >
                     <option value="English">English</option>
                     <option value="Hindi">Hindi</option>
@@ -105,25 +129,29 @@ export default function Signup({ searchParams }: { searchParams: Promise<Message
                     <option value="Punjabi">Punjabi</option>
                     <option value="Marathi">Marathi</option>
                   </select>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-gray-400 mt-1">
                     Hold Ctrl (Windows) or Command (Mac) to select multiple.
                   </p>
                 </div>
 
                 <div>
                   <Label htmlFor="linkedin_url">LinkedIn Profile URL</Label>
-                <Input
-                  name="linkedin_url"
-                  type="url"
-                  placeholder="https://linkedin.com/in/your-profile"
-                  required
-                />
-
+                  <Input
+                    name="linkedin_url"
+                    type="url"
+                    placeholder="https://linkedin.com/in/your-profile"
+                    required
+                    className="bg-gray-800 border-gray-700 text-white"
+                  />
                 </div>
 
                 <div>
                   <Label htmlFor="gender">Gender</Label>
-                  <select name="gender" className="border p-2 rounded w-full" required>
+                  <select
+                    name="gender"
+                    required
+                    className="bg-gray-800 border border-gray-700 rounded px-3 py-2 w-full text-white"
+                  >
                     <option value="">Select gender</option>
                     <option value="male">Male</option>
                     <option value="female">Female</option>

@@ -1,180 +1,157 @@
 "use server";
 
-import { encodedRedirect } from "@/utils/utils";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
+import { revalidatePath, redirect } from 'next/navigation';
+import { createClient } from '@/utils/supabase/server';
 
-// === SIGN UP ===
-export const signUpAction = async (formData: FormData) => {
-  const email = formData.get("email")?.toString();
-  const password = formData.get("password")?.toString();
-  const role = formData.get("role")?.toString();
-  const supabase = await createClient();
+import { createServerActionClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
+import { Database } from '@/types/supabase'; // Adjust path if needed
 
-  if (!email || !password || !role) {
-    return encodedRedirect("error", "/sign-up", "Email, password, and role are required");
-  }
 
-  const { data: signUpData, error } = await supabase.auth.signUp({
+export async function signUpAction(formData: FormData) {
+  const supabase = createServerActionClient<Database>({ cookies });
+   console.log(formData);
+  // Extract form fields
+  const email = formData.get('email') as string;
+  const password = formData.get('password') as string;
+  const role = formData.get('role') as string;
+  const profession = formData.get('profession') as string;
+  const languagesRaw = formData.get('languages') as string; // e.g. "English, Hindi"
+  const languages = languagesRaw.split(',').map(lang => lang.trim());
+  const linkedin_url = formData.get('linkedin_url') as string;
+  const gender = formData.get('gender') as string;
+
+  // Sign up user
+  const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
     email,
     password,
-    options: {
-      emailRedirectTo: `https://www.visaprepai.com/auth/callback`,
-    },
   });
 
-  if (error || !signUpData?.user) {
-    console.error("Sign-up error:", error?.message);
-    return encodedRedirect("error", "/sign-up", error?.message || "Signup failed");
+  if (signUpError) {
+    console.error('Supabase signUp error:', signUpError.message);
+    return { error: signUpError.message };
   }
 
-  const userId = signUpData.user.id;
+  const userId = signUpData.user?.id;
 
-  if (role === "company") {
-    const name = formData.get("name")?.toString();
-    const sector = formData.get("sector")?.toString();
-    const url = formData.get("url")?.toString();
-
-    const { error: insertError } = await supabase.from("company").upsert({
-      id: userId,
-      email,
-      name,
-      sector,
-      url,
-    });
+  // Insert additional profile data into a custom table (e.g., "tester")
+  if (userId && role === 'tester') {
+    const { error: insertError } = await supabase.from('tester').insert([
+      {
+        id: userId, // FK to auth.users
+        email,
+        profession,
+        languages,
+        linkedin_url,
+        gender,
+      },
+    ]);
 
     if (insertError) {
-      console.error("Company insert error:", insertError.message);
-      return encodedRedirect("error", "/sign-up", "Failed to save company info");
+      console.error('Tester insert error:', insertError.message);
+      return { error: insertError.message };
     }
   }
 
-  if (role === "tester") {
-    const profession = formData.get("profession")?.toString();
-    const linkedin_url = formData.get("linkedin_url")?.toString();
-    const gender = formData.get("gender")?.toString();
-    const languages = formData.getAll("languages") as string[];
+  return { success: true };
+}
 
-    const { error: insertError } = await supabase.from("tester").upsert({
-      id: userId,
-      email,
-      profession,
-      linkedin_url,
-      gender,
-      languages,
-      verified: false,
-    });
-
-    if (insertError) {
-      console.error("Tester insert error:", insertError.message);
-      return encodedRedirect("error", "/sign-up", "Failed to save tester info");
-    }
-  }
-
-  console.log(`New user signed up: ${email} as ${role}`);
-
-  return encodedRedirect(
-    "success",
-    "/sign-up",
-    "Thanks for signing up! Please check your email for a verification link."
-  );
-};
 
 // === SIGN IN WITH OAUTH (Google) ===
 export const signInwithOAuthAction = async () => {
-  const supabase = await createClient();
-  console.log("Signing in with Google...");
+    const supabase = createClient();
+    console.log("Signing in with Google...");
 
-  const { data, error } = await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: {
-      redirectTo: process.env.OAUTH_REDIRECT_URL,
-    },
-  });
+    const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+            redirectTo: process.env.NEXT_PUBLIC_OAUTH_REDIRECT_URL,
+        },
+    });
 
-  if (error) {
-    console.error("OAuth sign-in error:", error.message);
-  } else {
-    console.log("OAuth redirect URL:", data?.url);
-    if (data?.url) redirect(data.url);
-  }
+    if (error) {
+        console.error("OAuth sign-in error:", error.message);
+        return { error: error.message };
+    } else {
+        console.log("OAuth redirect URL:", data?.url);
+        if (data?.url) redirect(data.url);
+    }
 };
 
 // === SIGN IN WITH EMAIL/PASSWORD ===
 export const signInAction = async (formData: FormData) => {
-  const email = formData.get("email") as string;
-  const password = formData.get("password") as string;
-  const supabase = await createClient();
+    const email = formData.get("email") as string;
+    const password = formData.get("password") as string;
+    const supabase = createClient();
 
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
 
-  if (error) {
-    console.error("Sign-in error:", error.message);
-    return encodedRedirect("error", "/sign-in", error.message);
-  }
+    if (error) {
+        console.error("Sign-in error:", error.message);
+        return { error: error.message };
+    }
 
-  return redirect("/");
+    revalidatePath('/');
+    return redirect("/");
 };
 
 // === FORGOT PASSWORD ===
 export const forgotPasswordAction = async (formData: FormData) => {
-  const email = formData.get("email")?.toString();
-  const callbackUrl = formData.get("callbackUrl")?.toString();
-  const supabase = await createClient();
+    const email = formData.get("email")?.toString();
+    const callbackUrl = formData.get("callbackUrl")?.toString();
+    const supabase = createClient();
 
-  if (!email) {
-    return encodedRedirect("error", "/forgot-password", "Email is required");
-  }
+    if (!email) {
+        return { error: "Email is required" };
+    }
 
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    redirectTo: `https://www.visaprepai.com/auth/callback?redirect_to=/protected/reset-password`,
-  });
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `https://www.visaprepai.com/auth/callback?redirect_to=/protected/reset-password`,
+    });
 
-  if (error) {
-    console.error("Reset email error:", error.message);
-    return encodedRedirect("error", "/forgot-password", "Could not reset password");
-  }
+    if (error) {
+        console.error("Reset email error:", error.message);
+        return { error: "Could not reset password" };
+    }
 
-  if (callbackUrl) return redirect(callbackUrl);
-
-  return encodedRedirect("success", "/forgot-password", "Check your email to reset your password.");
+    if (callbackUrl) return redirect(callbackUrl);
+    revalidatePath('/forgot-password');
+    return { success: "Check your email to reset your password." };
 };
 
 // === RESET PASSWORD ===
 export const resetPasswordAction = async (formData: FormData) => {
-  const password = formData.get("password") as string;
-  const confirmPassword = formData.get("confirmPassword") as string;
-  const supabase = await createClient();
+    const password = formData.get("password") as string;
+    const confirmPassword = formData.get("confirmPassword") as string;
+    const supabase = createClient();
 
-  if (!password || !confirmPassword) {
-    return encodedRedirect(
-      "error",
-      "/protected/reset-password",
-      "Password and confirm password are required"
-    );
-  }
+    if (!password || !confirmPassword) {
+        return { error: "Password and confirm password are required" };
+    }
 
-  if (password !== confirmPassword) {
-    return encodedRedirect(
-      "error",
-      "/protected/reset-password",
-      "Passwords do not match"
-    );
-  }
+    if (password !== confirmPassword) {
+        return { error: "Passwords do not match" };
+    }
 
-  const { error } = await supabase.auth.updateUser({ password });
+    const { error } = await supabase.auth.updateUser({ password });
 
-  if (error) {
-    console.error("Password update error:", error.message);
-    return encodedRedirect("error", "/protected/reset-password", "Password update failed");
-  }
+    if (error) {
+        console.error("Password update error:", error.message);
+        return { error: "Password update failed" };
+    }
+    revalidatePath('/protected/reset-password');
+    return { success: "Password updated successfully" };
 
-  return encodedRedirect("success", "/protected/reset-password", "Password updated successfully");
 };
 
 // === SIGN OUT ===
 export const signOutAction = async () => {
-  const supabase = await createClient();
-  await supabase.auth.signOut();
-  return redirect("/");
+    const supabase = createClient();
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+        console.error("Signout error", error);
+        return { error: error.message };
+    }
+    revalidatePath('/');
+    return redirect("/");
 };
