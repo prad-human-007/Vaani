@@ -1,33 +1,43 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Vapi from "@vapi-ai/web";
-import { set } from "zod";
-
+import { showRatingDialogAtom } from "@/atom/ratingatom";
+import { useAtom } from "jotai";
 const publicKey = "81c01af8-d371-4191-bbf4-56c4bc0765bb";
 const assistantId = "43f7b402-06f6-4c67-a7ef-1832886a9b66";
 
 const useVapi = () => {
   const [volumeLevel, setVolumeLevel] = useState(0);
-  const [isSessionActive, setIsSessionActive] = useState(false);
+  const [showRatingDialogState, setShowRatingDialogState] = useAtom(showRatingDialogAtom);
+  const [isSessionActive, setIsSessionActive] = useState<"pending" | "ongoing" | "completed">("pending");
   const [isMuted, setIsMuted] = useState(false);
   const [conversation, setConversation] = useState<
     { role: string; text: string; timestamp: string; isFinal: boolean }[]
   >([]);
-  const [showRatingDialog, setShowRatingDialog] = useState(false); // State to control rating dialog visibility
+  const [showRatingDialog, setShowRatingDialog] = useState(false);
   const vapiRef = useRef<any>(null);
+
+  // Debug logging for state changes
+  useEffect(() => {
+    console.log('Vapi state changed:', { isSessionActive, showRatingDialog });
+  }, [isSessionActive, showRatingDialog]);
 
   const initializeVapi = useCallback(() => {
     if (!vapiRef.current) {
+      console.log('Initializing Vapi instance...');
       const vapiInstance = new Vapi(publicKey);
       vapiRef.current = vapiInstance;
 
       vapiInstance.on("call-start", () => {
-        setIsSessionActive(true);
+        console.log('Call started');
+        setIsSessionActive("ongoing");
+        setShowRatingDialog(false);
       });
 
       vapiInstance.on("call-end", () => {
-        setIsSessionActive(false);
-        setConversation([]); // Reset conversation on call end
-        setShowRatingDialog(true); // Show rating dialog
+        console.log('Call ended');
+        setIsSessionActive("completed");
+        setConversation([]);
+        setShowRatingDialog(true);
       });
 
       vapiInstance.on("volume-level", (volume: number) => {
@@ -96,15 +106,24 @@ const useVapi = () => {
 
       vapiInstance.on("error", (e: Error) => {
         console.error("Vapi error:", e);
-        setShowRatingDialog(true); // Show rating dialog on error
+        // Use a timeout to ensure state updates happen after the error
+        setShowRatingDialogState(true);
+        setTimeout(() => {
+          console.log('Setting states after error');
+          setShowRatingDialogState(true); // Close rating dialog if open
+          setIsSessionActive("completed");
+          setShowRatingDialog(true);
+        }, 0);
       });
     }
   }, []);
 
   useEffect(() => {
+    console.log('Initializing Vapi...');
     initializeVapi();
     return () => {
       if (vapiRef.current) {
+        console.log('Cleaning up Vapi instance');
         vapiRef.current.stop();
         vapiRef.current = null;
       }
@@ -113,14 +132,22 @@ const useVapi = () => {
 
   const toggleCall = async () => {
     try {
-      if (isSessionActive) {
+      if (isSessionActive === "ongoing") {
+        console.log('Stopping call...');
         await vapiRef.current.stop();
       } else {
+        console.log('Starting call...');
         await vapiRef.current.start(assistantId);
       }
     } catch (err) {
-      setShowRatingDialog(true); // Show rating dialog on error
       console.error("Error toggling Vapi session:", err);
+      setShowRatingDialogState(true);
+      // Use a timeout to ensure state updates happen after the error
+      setTimeout(() => {
+        console.log('Setting states after toggle error');
+        setIsSessionActive("completed");
+        setShowRatingDialog(true);
+      }, 0);
     }
   };
 
@@ -156,8 +183,8 @@ const useVapi = () => {
     say,
     toggleMute,
     isMuted,
-    showRatingDialog, // Expose rating dialog state
-    setShowRatingDialog, // Expose function to close the dialog
+    showRatingDialog,
+    setShowRatingDialog,
   };
 };
 
