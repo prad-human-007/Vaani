@@ -31,12 +31,12 @@ const features = [
   },
 ];
 
-// Placeholder component for the images until you have the real ones
-const ImagePlaceholder = ({ alt, className }) => (
-  <div className={`bg-gray-700 flex items-center justify-center ${className}`}>
-    <span className="text-gray-400 text-sm">{alt} (Placeholder)</span>
-  </div>
-);
+// // Placeholder component for the images until you have the real ones
+// const ImagePlaceholder = ({ alt, className }) => (
+//   <div className={`bg-gray-700 flex items-center justify-center ${className}`}>
+//     <span className="text-gray-400 text-sm">{alt} (Placeholder)</span>
+//   </div>
+// );
 
 const ObservabilityFeatures = () => {
   return (

@@ -3,8 +3,8 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { createNoise3D } from "simplex-noise";
 import useVapi from "@/hooks/use-vapi";
-import { showRatingDialogAtom } from "@/atom/ratingatom";
-import { useAtom } from "jotai";
+// import { showRatingDialogAtom } from "@/atom/ratingatom";
+// import { useAtom } from "jotai";
 const Orb: React.FC<{ onShowRatingDialogChange: (value: boolean) => void }> = ({ onShowRatingDialogChange }) => {
   const { volumeLevel, isSessionActive, toggleCall, showRatingDialog, setShowRatingDialog } = useVapi();
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
@@ -13,7 +13,7 @@ const Orb: React.FC<{ onShowRatingDialogChange: (value: boolean) => void }> = ({
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const ballRef = useRef<THREE.Mesh | null>(null);
   const originalPositionsRef = useRef<any | null>(null);
-  const [showRatingDialogState, setShowRatingDialogState] = useAtom(showRatingDialogAtom);
+  // const [showRatingDialogState, setShowRatingDialogState] = useAtom(showRatingDialogAtom);
   const noise = createNoise3D();
 
   useEffect(() => {

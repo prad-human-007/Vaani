@@ -12,8 +12,8 @@ interface Task {
 }
 
 export default function TaskList() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+  // const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+  // const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
   const supabase = createClient();
   const [tasks, setTasks] = useState<Task[]>([]);
   const age = 30;

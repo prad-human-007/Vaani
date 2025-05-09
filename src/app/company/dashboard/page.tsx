@@ -6,8 +6,8 @@ import useVapi from "@/hooks/use-vapi";
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
+  // DialogHeader,
+  // DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { StarIcon } from "@/components/livekit/StarIcon";
@@ -18,8 +18,7 @@ import { useAtom } from "jotai";
 
 export default function TestPage() {
   const { isSessionActive, showRatingDialog, setShowRatingDialog } = useVapi();
-  const [showRatingDialogState, setShowRatingDialogState] =
-    useAtom(showRatingDialogAtom);
+  const [showRatingDialogState ] = useAtom(showRatingDialogAtom);
   const [tasks, setTasks] = useState(null);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [feedback, setFeedback] = useState("");

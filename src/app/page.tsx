@@ -107,8 +107,8 @@ const MonitoringSection = () => { /* ... MonitoringSection component code ... */
               <p className="text-xs text-sky-400 mb-2">• Post Call Transcription</p>
               <div className="space-y-3">
                 {/* Changed patient bubble color to blueish */}
-                <div className="bg-blue-600 text-white p-3 rounded-lg rounded-bl-none text-sm shadow">Hi, I've been having some tingling in my hands and feeling short of breath lately. My doctor mentioned something about anxiety?<p className="text-xs text-blue-200 mt-1">Patient</p></div>
-                <div className="bg-gray-700 text-gray-300 p-3 rounded-lg rounded-br-none text-sm shadow">I understand your concerns. Let's talk about your symptoms and what your doctor found. Have you noticed any patterns with when these symptoms occur?<p className="text-xs text-gray-500 mt-1">Healthcare Provider</p></div>
+                <div className="bg-blue-600 text-white p-3 rounded-lg rounded-bl-none text-sm shadow">Hi, I&aposve been having some tingling in my hands and feeling short of breath lately. My doctor mentioned something about anxiety?<p className="text-xs text-blue-200 mt-1">Patient</p></div>
+                <div className="bg-gray-700 text-gray-300 p-3 rounded-lg rounded-br-none text-sm shadow">I understand your concerns. Let&aposs talk about your symptoms and what your doctor found. Have you noticed any patterns with when these symptoms occur?<p className="text-xs text-gray-500 mt-1">Healthcare Provider</p></div>
               </div>
             </div>
           </div>
@@ -236,7 +236,7 @@ const FaqSection = () => { /* ... FaqSection component code ... */
     <section id="faq" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-black">
       <div className="max-w-3xl mx-auto text-center">
         <h2 className="text-4xl sm:text-5xl font-bold text-white">Frequently Asked Questions</h2>
-        <p className="mt-4 text-lg text-gray-400">Got Questions? We've Got Answers.</p>
+        <p className="mt-4 text-lg text-gray-400">Got Questions? We&aposve Got Answers.</p>
       </div>
       <div className="mt-12 max-w-2xl mx-auto">
         <div className="border-t border-gray-800">

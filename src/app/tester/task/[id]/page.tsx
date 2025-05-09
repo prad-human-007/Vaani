@@ -13,8 +13,8 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { showRatingDialogAtom } from "@/atom/ratingatom";
 import { useAtom } from "jotai";
-import { StarIcon } from "@/components/livekit/StarIcon";
-import { CloseIcon } from "@/components/livekit/CloseIcon";
+// import { StarIcon } from "@/components/livekit/StarIcon";
+// import { CloseIcon } from "@/components/livekit/CloseIcon";
 
 export default function TestPage() {
   const { isSessionActive, showRatingDialog, setShowRatingDialog } = useVapi();

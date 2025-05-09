@@ -1,11 +1,11 @@
 "use client";
-import Image from "next/image";
-import { Button } from "../ui/button";
+// import Image from "next/image";
+// import { Button } from "../ui/button";
 import { ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
-import { PlanNoPay } from "../payment/Plans";
-import { AnimatedTooltipPreview } from "./tooltip";
+// import { PlanNoPay } from "../payment/Plans";
+// import { AnimatedTooltipPreview } from "./tooltip";
 import { ContainerScroll } from "../ui/container-scroll-animation";
 import {Navbar} from "../Navbar/navbar";
 
@@ -13,10 +13,11 @@ interface HeroProps {
   user: User | null;
 }
 
-export function Hero({ user }: HeroProps) {
+export function Hero({ }: HeroProps) {
   const router = useRouter();
   return (
     <div className="flex flex-col font-gilroy items-center justify-center w-full  p-2 mt-5 mb-5">
+
       
         <Navbar />
       
@@ -40,14 +41,13 @@ export function Hero({ user }: HeroProps) {
       </button>
       <ContainerScroll
         titleComponent={<h1 className="text-xl font-bold"></h1>}
-        children={
-          <img
-            src="https://framerusercontent.com/images/rvvJ07ek8eiNF6CW7e9vshgrK1I.png?scale-down-to=2048"
-            alt="Hero"
-            className="w-full h-full object-cover rounded-2xl"
-          />
-        }
-      />
+      >
+        <img
+          src="https://framerusercontent.com/images/rvvJ07ek8eiNF6CW7e9vshgrK1I.png?scale-down-to=2048"
+          alt="Hero"
+          className="w-full h-full object-cover rounded-2xl"
+        />
+      </ContainerScroll>
     </div>
   );
 }

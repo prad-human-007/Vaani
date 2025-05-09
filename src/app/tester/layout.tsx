@@ -1,9 +1,9 @@
 import { createClient } from "@/utils/supabase/server";
-import { UserDropdown } from "@/components/home/user-dropdown";
+// import { UserDropdown } from "@/components/home/user-dropdown";
 import { Sidebar } from "@/components/dashboard/Sidebar";
 import { SidebarSheet } from "@/components/dashboard/SidebarSheet";
 import { redirect } from "next/navigation";
-import Image from "next/image";
+// import Image from "next/image";
 
 export default async function DashboardLayout({children}: {children: React.ReactNode;}) {
     const supabase = await createClient();
