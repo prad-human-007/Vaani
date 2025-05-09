@@ -6,8 +6,8 @@ import "@livekit/components-styles";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "VisaPrepAi",
-  description: "Mock Visa Interview uisng AI!",
+  title: "Voc-al",
+  description: "Evaluation platform for Voice AI models.",
 };
 
 export default function RootLayout({

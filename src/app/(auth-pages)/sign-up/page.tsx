@@ -13,11 +13,11 @@ export default function Signup({ searchParams }: { searchParams: Promise<Message
   const [role, setRole] = useState("tester");
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-950 text-white px-4">
-      <Card className="w-full max-w-lg bg-gray-900 border border-gray-700 shadow-xl rounded-2xl">
+    <div className="min-h-screen flex items-center justify-center bg-zinc-950 text-white px-4">
+      <Card className="w-full max-w-lg bg-zinc-900 border border-zinc-700 shadow-xl rounded-2xl">
         <CardHeader className="text-center pt-6">
           <h1 className="text-3xl font-bold text-white">Create an account</h1>
-          <p className="mt-2 text-sm text-gray-400">
+          <p className="mt-2 text-sm text-zinc-400">
             Already have an account?{" "}
             <Link href="/sign-in" className="text-blue-400 hover:underline">
               Sign in

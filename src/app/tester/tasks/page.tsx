@@ -26,10 +26,8 @@ export default function TaskList() {
         .from("tasks")
         .select('id, name, description')
         .eq('status', 'pending')
-        .in('language', [language, 'all'])
-        .in('gender', [gender, 'all'])
-        .lte('min_age', age)
-        .gte('max_age', age);
+
+  
       
       if (error) {
         console.error("Error fetching tasks:", error);

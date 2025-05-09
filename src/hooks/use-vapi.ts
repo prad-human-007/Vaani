@@ -34,7 +34,7 @@ const useVapi = () => {
       });
 
       vapiInstance.on("call-end", () => {
-        console.log('Call ended');
+        console.log('Call ended by Preadhumn');
         setIsSessionActive("completed");
         setShowRatingDialogState(true);
         setConversation([]);

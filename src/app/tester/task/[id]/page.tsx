@@ -18,11 +18,15 @@ import { CloseIcon } from "@/components/livekit/CloseIcon";
 
 export default function TestPage() {
   const { isSessionActive, showRatingDialog, setShowRatingDialog } = useVapi();
-  const [showRatingDialogState, setShowRatingDialogState] =
-    useAtom(showRatingDialogAtom);
+  const [showRatingDialogState, setShowRatingDialogState] = useAtom(showRatingDialogAtom);
   const [tasks, setTasks] = useState(null);
   const [selectedRating, setSelectedRating] = useState<number | null>(null);
   const [feedback, setFeedback] = useState("");
+
+
+const [liked, setLiked] = useState('');
+const [improvement, setImprovement] = useState('');
+const [experienceType, setExperienceType] = useState('');
 
   useEffect(() => {
     console.log("State changed:", {
@@ -67,49 +71,86 @@ export default function TestPage() {
         </div>
       )}
 
-      <Dialog open={showRatingDialog} onOpenChange={setShowRatingDialog}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Rate Your Experience</DialogTitle>
-          </DialogHeader>
-          <div className="flex flex-col items-center py-4">
-            <div className="flex space-x-1 mb-4">
-              {[1, 2, 3, 4, 5].map((starIndex) => {
-                const isFilled = selectedRating && starIndex <= selectedRating;
-                return (
-                  <button
-                    key={starIndex}
-                    type="button"
-                    onClick={() => handleRate(starIndex)}
-                    className={`p-1 text-3xl cursor-pointer transition-colors ${
-                      isFilled ? "text-yellow-400" : "text-gray-300 dark:text-gray-600"
-                    }`}
-                    aria-label={`Rate ${starIndex} stars`}
-                  >
-                    ★
-                  </button>
-                );
-              })}
-            </div>
-            {selectedRating && (
-              <>
-                <Textarea
-                  value={feedback}
-                  onChange={(e) => setFeedback(e.target.value)}
-                  placeholder="Additional feedback (optional)"
-                  className="mb-4"
-                />
-                <Button onClick={handleDialogClose}>Submit</Button>
-              </>
-            )}
-            {!selectedRating && (
-              <Button variant="ghost" onClick={handleDialogClose} className="mt-4">
-                Maybe Later
-              </Button>
-            )}
-          </div>
-        </DialogContent>
-      </Dialog>
+<Dialog open={showRatingDialogState} onOpenChange={setShowRatingDialogState}>
+  <DialogContent className="bg-zinc-900 text-white border-zinc-700">
+    <DialogHeader>
+      <DialogTitle className="text-white">Rate Your Experience</DialogTitle>
+      <p className="text-sm text-zinc-400 mt-1">
+        Your feedback helps us improve. Please rate and share your thoughts.
+      </p>
+    </DialogHeader>
+    <div className="flex flex-col items-center py-4">
+      {/* Star Rating */}
+      <div className="flex space-x-1 mb-4">
+        {[1, 2, 3, 4, 5].map((starIndex) => {
+          const isFilled = selectedRating && starIndex <= selectedRating;
+          return (
+            <button
+              key={starIndex}
+              type="button"
+              onClick={() => handleRate(starIndex)}
+              className={`p-1 text-3xl cursor-pointer transition-colors ${
+                isFilled ? "text-yellow-400" : "text-zinc-500"
+              }`}
+              aria-label={`Rate ${starIndex} stars`}
+            >
+              ★
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Feedback Fields */}
+      <Textarea
+        value={feedback}
+        onChange={(e) => setFeedback(e.target.value)}
+        placeholder="Overall feedback (optional)"
+        className="mb-4 bg-zinc-800 border-zinc-600 text-white placeholder-zinc-400 w-full"
+      />
+      <Textarea
+        value={liked}
+        onChange={(e) => setLiked(e.target.value)}
+        placeholder="What did you like?"
+        className="mb-4 bg-zinc-800 border-zinc-600 text-white placeholder-zinc-400 w-full"
+      />
+      <Textarea
+        value={improvement}
+        onChange={(e) => setImprovement(e.target.value)}
+        placeholder="What could be improved?"
+        className="mb-4 bg-zinc-800 border-zinc-600 text-white placeholder-zinc-400 w-full"
+      />
+
+      {/* Experience Type */}
+      <select
+        value={experienceType}
+        onChange={(e) => setExperienceType(e.target.value)}
+        className="mb-4 bg-zinc-800 border border-zinc-600 text-white w-full p-2 rounded"
+      >
+        <option value="">Select experience type</option>
+        <option value="support">Support</option>
+        <option value="product">Product</option>
+        <option value="delivery">Delivery</option>
+        <option value="other">Other</option>
+      </select>
+
+      {/* Buttons */}
+      <div className="flex justify-end w-full">
+        <Button onClick={handleDialogClose} className="bg-yellow-500 hover:bg-yellow-600 text-black">
+          Submit
+        </Button>
+        <Button
+          variant="ghost"
+          onClick={handleDialogClose}
+          className="ml-2 text-zinc-400 hover:text-white"
+        >
+          Maybe Later
+        </Button>
+      </div>
+    </div>
+  </DialogContent>
+</Dialog>
+
+
     </div>
   );
 }

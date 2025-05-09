@@ -12,7 +12,6 @@ const config: Config = {
 		animation: {
 			'border-spin': 'rotateBorder 5s linear infinite',
 		  },
-
 		  keyframes: {
 			rotateBorder: {
 			  '0%': { '--angle': '0deg' },
@@ -21,6 +20,7 @@ const config: Config = {
 		  },
       fontFamily: {
         gilroy: ["Gilroy", "sans-serif"],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', "Segoe UI", 'Roboto', "Helvetica Neue", 'Arial', "Noto Sans", 'sans-serif', "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
       },
       colors: {
         background: "hsl(var(--background))",

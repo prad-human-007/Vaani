@@ -106,7 +106,7 @@ export const forgotPasswordAction = async (formData: FormData) => {
     }
 
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `https://www.visaprepai.com/auth/callback?redirect_to=/protected/reset-password`,
+        redirectTo: `https://www.voc-al.com/auth/callback?redirect_to=/protected/reset-password`,
     });
 
     if (error) {
