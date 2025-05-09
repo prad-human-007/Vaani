@@ -27,7 +27,7 @@ const Icon = ({ name, className = '' }: { name: string, className?: string }) =>
 const RoarkLogo = () => (
   <div className="w-8 h-8">
     <Image
-      src="/images/logo8.png"
+      src="/images/logo8.png" // Ensure this path is correct in your public folder
       alt="Roark Logo"
       width={50}
       height={50}
@@ -36,15 +36,28 @@ const RoarkLogo = () => (
   </div>
 );
 
-const Navbar = () => { /* ... Navbar component code ... */ return (
+const Navbar = () => {
+  const navLinks = [
+    { name: 'Product', dropdown: true, href: "#" }, // Keep existing href or update if Product section exists
+    { name: 'Integration', href: "#integration" }, // Updated href
+    { name: 'Pricing', href: "#" }, // Keep existing href or update if Pricing section exists
+    { name: 'Faq', href: "#faq" }, // Updated href
+    { name: 'About', href: "#" } // Keep existing href or update if About section exists
+  ];
+
+  return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-black/80 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           <div className="flex items-center">
             <RoarkLogo />
             <div className="hidden md:flex items-baseline space-x-6 ml-10">
-              {[{ name: 'Product', dropdown: true }, { name: 'Integration' }, { name: 'Pricing' }, { name: 'Blog' }, { name: 'Faq' }, { name: 'About' }, { name: 'Docs' }].map((link) => (
-                <a key={link.name} href="#" className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center">
+              {navLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  className="text-gray-300 hover:text-white px-3 py-2 rounded-md text-sm font-medium flex items-center"
+                >
                   {link.name}
                   {link.dropdown && <Icon name="chevron-down" className="ml-1" />}
                 </a>
@@ -53,12 +66,13 @@ const Navbar = () => { /* ... Navbar component code ... */ return (
           </div>
           <div className="flex items-center space-x-4">
             <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200 transition-colors">Book a demo</button>
-            <a href="#" className="text-gray-300 hover:text-white text-sm font-medium">Sign in <Icon name="arrow-right" className="inline-block ml-1" /></a>
+            <a href="/sign-up" className="text-gray-300 hover:text-white text-sm font-medium">Sign up <Icon name="arrow-right" className="inline-block ml-1" /></a>
           </div>
         </div>
       </div>
     </nav>
-  );};
+  );
+};
 
 const HeroSection = () => { /* ... HeroSection component code ... */ return (
     <section className="relative min-h-screen flex flex-col items-center justify-center text-center pt-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
@@ -152,7 +166,8 @@ const MonitoringSection = () => { /* ... MonitoringSection component code ... */
   );};
 
 const IntegrationSection = () => { /* ... IntegrationSection component code ... */ return (
-    <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-black">
+    // Added id="integration"
+    <section id="integration" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-black">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <div>
@@ -217,7 +232,8 @@ const FaqSection = () => { /* ... FaqSection component code ... */
   const [openIndex, setOpenIndex] = useState<number | null>(null);
   const handleToggle = (index: number) => { setOpenIndex(openIndex === index ? null : index); };
  return (
-    <section className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-black">
+    // Added id="faq"
+    <section id="faq" className="py-16 sm:py-24 px-4 sm:px-6 lg:px-8 bg-black">
       <div className="max-w-3xl mx-auto text-center">
         <h2 className="text-4xl sm:text-5xl font-bold text-white">Frequently Asked Questions</h2>
         <p className="mt-4 text-lg text-gray-400">Got Questions? We've Got Answers.</p>
@@ -271,7 +287,7 @@ const FooterSection = () => {
             </p>
             <div className="mt-6">
               <Image
-                src="/img/hipaa-badge.png"
+                src="/img/hipaa-badge.png" // Ensure this path is correct in your public folder
                 alt="HIPAA Compliant"
                 width={96}
                 height={96}
@@ -336,8 +352,30 @@ const FooterSection = () => {
 
 
 export default function LandingPage() {
+  // For smooth scrolling, it's best to apply this to the <html> tag in your global CSS (e.g., globals.css or layout.tsx)
+  // html { scroll-behavior: smooth; }
+  // As a workaround for this single file, we can add styles to the main div or use inline style for the html element via useEffect.
+  // However, direct DOM manipulation or global styles are preferred for `scroll-behavior`.
+  // Here, we'll rely on the browser's default behavior for anchor links,
+  // but for optimal experience, `scroll-behavior: smooth;` in global CSS is recommended.
+
+  React.useEffect(() => {
+    document.documentElement.style.scrollBehavior = 'smooth';
+    return () => {
+      document.documentElement.style.scrollBehavior = ''; // Clean up on unmount
+    };
+  }, []);
+
+
   return (
-    <div className="bg-black text-white min-h-screen font-sans">
+    // Applying scroll-pt (scroll-padding-top) to account for the fixed navbar height
+    // The h-20 navbar is 5rem, so we add padding top for scrolling.
+    // This ensures the section title is not hidden behind the fixed navbar when scrolled to.
+    // Note: This is applied to the scroll container. If your <html> or <body> is the scroller,
+    // you'd apply it there via global CSS: html { scroll-padding-top: 5rem; }
+    // For this example, if this div is the primary scroller, it works.
+    // But typically `<html>` is.
+    <div className="bg-black text-white min-h-screen font-sans" style={{ scrollPaddingTop: '5rem' /* 80px for h-20 navbar */ }}>
       <Navbar />
       <main>
         <HeroSection />
