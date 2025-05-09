@@ -42,7 +42,7 @@ const Navbar = () => {
     { name: 'Integration', href: "#integration" }, // Updated href
     { name: 'Pricing', href: "#" }, // Keep existing href or update if Pricing section exists
     { name: 'Faq', href: "#faq" }, // Updated href
-    { name: 'About', href: "#" } // Keep existing href or update if About section exists
+    { name: 'About', href: "/about" } // Keep existing href or update if About section exists
   ];
 
   return (
@@ -65,7 +65,7 @@ const Navbar = () => {
             </div>
           </div>
           <div className="flex items-center space-x-4">
-            <button className="bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200 transition-colors">Book a demo</button>
+            <a href='/demo' className="bg-white text-black px-4 py-2 rounded-lg text-sm font-semibold hover:bg-gray-200 transition-colors">Book a demo</a>
             <a href="/sign-up" className="text-gray-300 hover:text-white text-sm font-medium">Sign up <Icon name="arrow-right" className="inline-block ml-1" /></a>
           </div>
         </div>
@@ -84,7 +84,7 @@ const HeroSection = () => { /* ... HeroSection component code ... */ return (
       <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-white leading-tight">Ship Voice AI That <br /> Work in the Real World</h1>
       <p className="mt-6 max-w-2xl text-lg text-gray-400">Simulations miss what real users reveal. Vocal puts your voice agents in front of real people so you can ship with confidence.</p>
       <div className="mt-10 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-        <button className="bg-white text-black px-6 py-3 rounded-lg text-base font-semibold hover:bg-gray-200 transition-colors w-full sm:w-auto">Book a demo</button>
+        <a href='/demo' className="bg-white text-black px-6 py-3 rounded-lg text-base font-semibold hover:bg-gray-200 transition-colors w-full sm:w-auto">Book a demo</a>
         <a href="#" className="text-white hover:text-gray-300 px-6 py-3 text-base font-medium flex items-center group">Learn more <Icon name="arrow-right" className="ml-2 group-hover:translate-x-1 transition-transform" /></a>
       </div>
     </section>
