@@ -1,9 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
-import { SignInButton, SignUpButton } from "@/components/auth-buttons";
-import { UserDropdown } from "@/components/home/user-dropdown";
 import { Hero } from "@/components/home/hero";
-import Image from "next/image";
-import { ModeToggle } from "@/components/mode-toggle";
 import AutonomousTestingComponent from "@/components/autonomous/autonomous";
 import HowItWorks from "@/components/how/howitworks";
 import ObservabilityFeatures from "@/components/observatibility/features";

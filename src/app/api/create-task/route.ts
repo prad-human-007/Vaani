@@ -1,87 +1,90 @@
-import { NextResponse } from "next/server";
-import { createClient, User } from "@supabase/supabase-js";
-export const dynamic = "force-dynamic";
+import { NextRequest, NextResponse } from 'next/server';
+import { createClient } from '@supabase/supabase-js';
 
-interface Task {
-    name: string;
-    description: string;
-    min_age: number;
-    max_age: number;
-    gender: string;
-    language: string;
-}
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.SUPABASE_SERVICE_ROLE_KEY!
+);
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
-const supabase = createClient(supabaseUrl!, supabaseKey!);
-let user: User | null = null;
-let chatsLeft: number = 0;
-
-async function isAuthenticated(req: Request) {
-  const token = req.headers.get("Authorization")?.replace("Bearer ", "");
-  if (!token) {
-    return new NextResponse("No token Provied", { status: 401 });
-  }
-
-  const { data, error } = await supabase.auth.getUser(token);
-  if (error || !data || data.user.role != "authenticated") {
-    console.error("Failed to authenticate user: ", token, "Error: ", error);
-    return new NextResponse("Token not valid", { status: 401 });
-  }
-
-  return "authenticated";
-}
-
-async function createGroup() {
-    const {data, error} = await supabase
-        .from('task_group')
-        .insert({ name: `Task Group ${Math.floor(Math.random() * 500)}`, description: `Task group description ${Math.floor(Math.random() * 500)}`})
-        .select('id')
-    if (error) {
-        console.error("Error creating task group:", error);
-        return new NextResponse('Failed in creating task group', { status: 500 });
-    } else {
-        console.log("Task group created:", data);
-        return data[0].id;
-    }
-
-}
-export async function POST(req: Request) {
-
-
-    // await isAuthenticated(req);
-
+export async function POST(req: NextRequest) {
+  try {
     const body = await req.json();
 
-    // Check if it's an array
-    if (!Array.isArray(body)) {
-        return new NextResponse('Request body should be an array', { status: 400 });
+    const {
+      company_id,
+      name,
+      description,
+      min_age,
+      max_age,
+      sector,
+      language,
+      comment,
+      pool_size
+    } = body;
+
+    // 1. Create task_group
+    const { data: taskGroupData, error: taskGroupError } = await supabase
+      .from('task_group')
+      .insert([
+        {
+          company_id,
+          name,
+          description,
+          min_age,
+          max_age,
+          sector,
+          language,
+          comment,
+          pool_size,
+        },
+      ])
+      .select()
+      .single();
+
+    if (taskGroupError || !taskGroupData) {
+      return NextResponse.json({ error: taskGroupError?.message }, { status: 500 });
     }
 
-    // Optionally: Validate each item
-    for (const item of body) {
-        if (!item.name || !item.description) {
-            return new NextResponse('Invalid request: Missing name or description in one of the tasks', { status: 400 });
-        }
+    const task_group_id = taskGroupData.id;
+
+    // 2. Find eligible testers
+    const { data: eligibleTesters, error: testerError } = await supabase
+      .from('tester')
+      .select('id')
+      
+
+    if (testerError) {
+      return NextResponse.json({ error: testerError.message }, { status: 500 });
     }
 
-    const id = await createGroup();
-
-    for (let i=0; i<body.length; i++) {
-        body[i].task_group = id;
+    if (!eligibleTesters || eligibleTesters.length === 0) {
+      return NextResponse.json({ message: 'No eligible testers found' }, { status: 404 });
     }
 
-    const { data, error } = await supabase
-        .from("tasks")
-        .insert(body);
+    // 3. Insert tasks
+    const tasksToInsert = eligibleTesters.map(tester => ({
+      task_group_id,
+      tester_id: tester.id,
+      status: 'pending'
+    }));
 
-    if (error) {
-        console.error("Error creating task:", error);
-        NextResponse.json({message: 'Failed in inserting task'}, { status: 500 })
-    } else {
-        console.log("Task created:", data);
+    const { data: insertedTasks, error: taskInsertError } = await supabase
+      .from('tasks')
+      .insert(tasksToInsert)
+      .select(); // Return task IDs
+
+    if (taskInsertError) {
+      return NextResponse.json({ error: taskInsertError.message }, { status: 500 });
     }
-    
-    return NextResponse.json({message: 'Inserted Task'}, { status: 200 });
+
+    return NextResponse.json({
+      message: 'Task group created and testers assigned',
+      task_group: taskGroupData,
+      tasks: insertedTasks // includes task.id
+    }, { status: 201 });
+
+  } catch (err: any) {
+    console.error(err);
+    return NextResponse.json({ error: 'Unexpected error' }, { status: 500 });
+  }
 }
-
